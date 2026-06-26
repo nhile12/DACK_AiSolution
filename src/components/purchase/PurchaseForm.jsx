@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import {
   FaPaperPlane,
   FaRedo,
@@ -9,33 +13,26 @@ import Button from "../common/Button";
 import InputField from "../common/InputField";
 import SelectField from "../common/SelectField";
 import TextAreaField from "../common/TextAreaField";
-import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-
-import toast from "react-hot-toast";
 export default function PurchaseForm() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const [loading, setLoading] = useState(false);
-const handleSubmit = () => {
+  const [loading, setLoading] = useState(false);
 
-  setLoading(true);
+  const handleSubmit = () => {
+    setLoading(true);
 
-  setTimeout(() => {
+    setTimeout(() => {
+      setLoading(false);
 
-    setLoading(false);
+      toast.success("Yêu cầu đánh giá đã được gửi thành công!");
 
-    toast.success("Yêu cầu đã được gửi thành công!");
+      navigate("/dashboard");
+    }, 2000);
+  };
 
-    navigate("/dashboard");
-
-  }, 2000);
-
-};
   return (
     <Card title="Thông tin yêu cầu mua hàng">
-
       <div className="grid grid-cols-2 gap-6">
 
         <SelectField label="Danh mục vật tư" required>
@@ -82,12 +79,10 @@ const handleSubmit = () => {
       </div>
 
       <div className="mt-6">
-
         <TextAreaField
           label="Mô tả yêu cầu"
           placeholder="Ví dụ: Cần thép đạt tiêu chuẩn ASTM A36. Ưu tiên nhà cung cấp từng hợp tác..."
         />
-
       </div>
 
       <div className="mt-6">
@@ -114,22 +109,34 @@ const handleSubmit = () => {
 
       <div className="flex gap-4 mt-8">
 
-        <Button>
+        <Button
+          onClick={handleSubmit}
+          disabled={loading}
+        >
           <div className="flex items-center gap-2">
+
             <FaPaperPlane />
-            Gửi yêu cầu đánh giá
+
+            {loading
+              ? "AI đang phân tích..."
+              : "Gửi yêu cầu đánh giá"}
+
           </div>
         </Button>
 
         <Button variant="secondary">
+
           <div className="flex items-center gap-2">
+
             <FaRedo />
+
             Làm mới
+
           </div>
+
         </Button>
 
       </div>
-
     </Card>
   );
 }
